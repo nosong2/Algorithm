@@ -1,38 +1,40 @@
 import sys
 from collections import deque
+
 input = sys.stdin.readline
 
-di = [0, 1, 0, -1]
-dj = [1, 0, -1, 0]
+dx = [0, 1, 0, -1]
+dy = [1, 0, -1, 0]
+Quere = deque()
 
 def bfs():
-    for i in range(M):
-        for j in range(N):
-            if box[i][j] == 1:
-                Queue.append([i, j])
+    global date
+    for i in range(m):
+        for j in range(n):
+            if square[i][j] == 1:
+                Quere.append([i, j, date])
                 visited[i][j] = 1
-    while Queue:
-        y, x = Queue.popleft()
+    while Quere:
+        x, y, date = Quere.popleft()
         for k in range(4):
-            ni = y + di[k]
-            nj = x + dj[k]
-            if 0 <= ni < M and 0 <= nj < N and box[ni][nj] == 0 and visited[ni][nj] == 0:
-                box[ni][nj] = 1
-                visited[ni][nj] = visited[y][x] + 1
-                Queue.append([ni, nj])
+            nx = x + dx[k]
+            ny = y + dy[k]
+            if 0 <= nx < m and 0 <= ny < n and visited[nx][ny] == 0 and square[nx][ny] == 0:
+                square[nx][ny] = 1
+                visited[nx][ny] = 1
+                Quere.append([nx, ny, date + 1])
 
 
-N, M = map(int, (input().split()))
-box = [list(map(int, input().split())) for _ in range(M)]
-visited = [[0] * N for _ in range(M)]
-result = 0
-Queue = deque()
+n, m = map(int, input().split())
 
+square = [list(map(int, input().split())) for i in range(m)]
+visited = [[0] * n for _ in range(m)]
+date = 0
 bfs()
-for i in range(M):
-    for j in range(N):
-        if box[i][j] == 0:
-            result = -1
-if max(sum(visited, [])) != 0 and result != -1:
-    result = max(sum(visited, [])) - 1
-print(result)
+
+for i in range(m):
+    for j in range(n):
+        if square[i][j] == 0:
+            print(-1)
+            exit(0)
+print(date)
