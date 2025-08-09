@@ -1,44 +1,41 @@
 import sys
 from collections import deque
+
 input = sys.stdin.readline
 
-di = [0, 1, 0, -1]
-dj = [1, 0, -1, 0]
+dx = [0, 1, 0, -1]
+dy = [1, 0, -1, 0]
+Quere = deque()
 
 def bfs():
-    global picture_size_save, picture_count
-    for i in range(N):
-        for j in range(M):
-            if paper[i][j] == 1 and visited[i][j] == 0:
-                paper_list.append([i, j])
-    while paper_list:
-        q, w = paper_list.popleft()
-        if visited[q][w] == 0:
-            Queue.append([q, w])
-            visited[q][w] = 1
-            picture_count += 1
-            picture_size = 1
-            while Queue:
-                y, x = Queue.popleft()
-                for k in range(4):
-                    ni = y + di[k]
-                    nj = x + dj[k]
-                    if 0 <= ni < N and 0 <= nj < M and paper[ni][nj] == 1 and visited[ni][nj] == 0:
-                        Queue.append([ni, nj])
-                        visited[ni][nj] = visited[y][x] + 1
-                        picture_size += 1
-                if picture_size_save < picture_size:
-                    picture_size_save = picture_size
+    global cleanup, oh, maxoh
+    for i in range(n):
+        for j in range(m):
+            if room[i][j] == 1 and visited[i][j] == 0:
+                Quere.append([i, j])
+                visited[i][j] = 1
+                cleanup += 1
+                oh = 1
+                while Quere:
+                    x, y = Quere.popleft()
+                    for k in range(4):
+                        nx = x + dx[k]
+                        ny = y + dy[k]
+                        if 0 <= nx < n and 0 <= ny < m and visited[nx][ny] == 0 and room[nx][ny] == 1:
+                            visited[nx][ny] = 1
+                            Quere.append([nx, ny])
+                            oh += 1
+                if maxoh < oh: maxoh = oh
 
+n, m = map(int, input().split())
 
-N, M = map(int, input().split())
-paper = [list(map(int, input().split())) for _ in range(N)]
-visited = [[0] * M for _ in range(N)]
-Queue = deque()
-paper_list = deque()
-picture_count = 0
-picture_size_save = 0
+room = [list(map(int, input().split())) for i in range(n)]
+visited = [[0] * m for _ in range(n)]
+cleanup = 0
+oh = 0
+maxoh = 0
 
 bfs()
-print(picture_count)
-print(picture_size_save)
+
+print(cleanup)
+print(maxoh)
