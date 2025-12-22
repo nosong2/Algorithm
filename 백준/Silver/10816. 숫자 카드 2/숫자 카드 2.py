@@ -4,9 +4,15 @@ N = int(input())
 Nlist = list(map(int, input().split()))
 M = int(input())
 Mlist = list(map(int, input().split()))
-result = [0] * 20000001
-
+# result = [0] * 20000000
+result = {}
 for i in Nlist:
-    result[i] += 1
+    if i in result:
+        result[i] += 1
+    else:
+        result[i] = 1
 for i in Mlist:
-    print(result[i], end=" ")
+    if i in result:
+        print(result[i], end=" ")
+    else:
+        print(0, end=" ")
